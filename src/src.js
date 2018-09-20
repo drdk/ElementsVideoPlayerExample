@@ -7,42 +7,44 @@ import { VideoPlayer } from '@dr/elements';
 class MyApp extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      player: null
-    }
-    this.playerCB = this.playerCB.bind(this);
+    this.videoPlayerRef = React.createRef();
   }
 
-  // when provided as a cb value to the VideoPlayer component
-  // this function is called as soon as videojs is instantiated.
+  handleReadyEvent() {
+    // Once player ready has been called, 
+    // the playerActions object will be available on the videoplayer ref.
+    const playerActions = this.videoPlayerRef.current.playerActions;
+    playerActions.pause();
+    playerActions.play();
+    // playerActions.seek(30) // seconds
+    // playerActions.duration() // returns the length of the stream in seconds.
+    // playeractions.currentTime() // returns how many seconds into the stream, the media has played.
 
-  // the player reference is a videojs player object:
-  // https://docs.videojs.com/docs/api/player.html
-
-  // player.player_ returns a standard video element reference 
-  // https://www.w3schools.com/tags/ref_av_dom.asp
-  playerCB(player) {
-    // Interact with player once it has started. 
-    player.on('ready', ()=>{
-      player.volume(0); // mute the player
-    });
-
-    // or make it available to your application via this.state.player
-    this.setState({
-      player: player
-    });
   }
-  componentDidUpdate() {
-    if(this.state.player) {
-      // Player can now be interacted with via state.
-    }
+  handlePlayEvent() {
+    //player event is caught here
+    console.log("play event");
   }
+  
   render() {
     return (
       <div>
-        <VideoPlayer 
-          resource="urn:dr:mu:programcard:5a78b748a11f9f171cc3bfcb" 
-          cb={this.playerCB} />
+        <VideoPlayer
+          resource="urn:dr:mu:programcard:5a78b748a11f9f171cc3bfcb"
+          // offset, sets amount of seconds into the program, a stream should start.
+          offset={20}
+          // ref allows you to access the playerActions object on the videoplayer reference.
+          // these actions cant be called before the player ready event has been triggered.
+          // actions include: play, pause, seek, duration, currentTime
+          ref={this.videoPlayerRef}
+
+          // event listeners are added directly on the component, 
+          onReady={this.handleReadyEvent}
+          onPlay={this.handlePlayEvent}
+          // onPause={this.handlePauseEvent}
+          // onTimeupdate={this.handleTimeupdatedEvent}
+          // onEnded={this.handleEndedEvent}
+          />
         This text should not jump when player is loaded
         </div>
     );
