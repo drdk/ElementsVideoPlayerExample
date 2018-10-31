@@ -26,8 +26,8 @@ class MyApp extends Component {
   handlePlayEvent() {
     let playerActions = this.videoPlayerRef.current.playerActions;
     // the play event is always triggered after ready, so playerActions should always be available here.
-    console.log("play event triggered, pausing player");
-    playerActions.pause();
+    console.log("play event triggered, could pause player here");
+    //playerActions.pause();
   }
   
   render() {

@@ -1,14 +1,12 @@
 const path = require('path');
-const isProduction = process.env.NODE_ENV === 'production';
 
 module.exports = {
-  entry: "./src/src.js",
+  entry: { "drc-video-core": "./src/src.js" },
   output: {
     path: path.resolve(__dirname, './dist/js'),
     filename: "player.dist.js",
     publicPath: '/dist/js/'
   },
-  watch: true,
   module: {
     rules: [
       {
@@ -26,29 +24,6 @@ module.exports = {
         test: /\.css$/,
         loaders: ['style-loader', 'css-loader']
       },
-      {
-        test: /\.png/,
-        use: [
-          {
-            loader: 'url-loader',
-            options: {
-              limit: '10000',
-              minetype: 'image/png'
-            }
-          }
-        ]
-      },
-      {
-        test: /\.swf$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: 'swf/[name].[ext]'
-            }
-          }
-        ]
-      }
     ]
   },
   node: {
